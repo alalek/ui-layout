@@ -1,6 +1,7 @@
 'use strict';
 
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    runSequence = require('run-sequence');
 
 //////////////////////////////////////////////////////////////////////////////
 // TASK
@@ -8,12 +9,17 @@ var gulp = require('gulp');
 
 gulp.task('default', ['jshint', 'karma']);
 gulp.task('serve', ['dist', 'continuousMode']);
-gulp.task('dist', ['clean:dist', 'uglify'], function(){
+gulp.task('dist', function(cb) {
+  runSequence(
+      'clean:dist',
+      'dist:do',
+      cb);
+});
+
+gulp.task('dist:do', ['uglify'], function(){
   return gulp.src('*.css', { cwd: './src' })
     .pipe(gulp.dest('./dist'));
 });
-
-
 
 //////////////////////////////////////////////////////////////////////////////
 // MORE
